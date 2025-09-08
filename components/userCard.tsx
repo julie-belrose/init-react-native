@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-export interface userCard {
+export interface UserCardProps {
     name: string;
     job: string;
     rating: number;
@@ -9,7 +9,7 @@ export interface userCard {
     avatar: string;
 }
 
-const userData: userCard = {
+const userData: UserCardProps = {
     name: "John Doe",
     job: "Développeur React Native",
     rating: 5,
@@ -20,10 +20,10 @@ const userData: userCard = {
 
 
 // Header component
-function Header({ userData }: { userData: userCard }) {
+function Header({ userData }: { userData: UserCardProps }) {
     return (
-        <View style={{ /* layout row */ }}>
-            <Image source={{ uri: userData.avatar }} style={{ /* profil */ }} />
+        <View style={styles.header}>
+            <Image source={{ uri: userData.avatar }} style={styles.avatar} />
             <View>
                 <Text>{userData.name}</Text>
                 <Text>{userData.job}</Text>
@@ -32,9 +32,10 @@ function Header({ userData }: { userData: userCard }) {
         </View>
     );
 }
+//
 
 // Contact component
-function Contact({ userData }: { userData: userCard }) {
+function Contact({ userData }: { userData: UserCardProps }) {
     return (
         <View>
             <Text>{userData.email}</Text>
@@ -44,43 +45,28 @@ function Contact({ userData }: { userData: userCard }) {
 }
 
 // Main ProfileCard component
-export function ProfileCard() {
+//         ### Layout
+// - Carte avec fond blanc et ombres légères
+// - Coins arrondis
+// - Marges extérieures
+// - Padding interne
+export function ProfileCard({ userData }: { userData: UserCardProps }) {
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.card}>
+                <Header userData={userData} />
+                <View style={styles.contact}>
+                    <Contact userData={userData} />
+                </View>
+            </View>
+        </SafeAreaView>
+    );
 
 }
 
-export function userCard({ userData }: { userData: userCard }) {
+export function UserCard({ userData }: { userData: UserCardProps }) {
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View>
-            </View>
-        </SafeAreaView>
-
-        // 1. **Section header** : Photo de profil + informations utilisateur
-        //     - Photo de profil circulaire
-        //     - Nom complet
-        //     - Intitulé du poste
-        //     - Note sous forme d'étoiles
-
-        // 2. **Section contact** : Informations de contact
-        //     - Adresse email
-        //     - Numéro de téléphone
-
-        //         ### Layout
-        // - Carte avec fond blanc et ombres légères
-        // - Coins arrondis
-        // - Marges extérieures
-        // - Padding interne
-
-        // ### Header
-        // - Photo et informations côte à côte
-        // - Photo de profil circulaire (80x80 pixels)
-        // - Informations alignées verticalement à droite de la photo
-
-        // ### Section contact
-        // - Séparée du header par une ligne horizontale
-        // - Informations de contact listées verticalement
-
-
+        <ProfileCard userData={userData} />
     );
 }
 
@@ -89,24 +75,65 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 50,
     },
-    //     **card** :
-    //     - Fond blanc
-    //     - Padding de 20px
-    //     - Marge de 16px
-    //     - Coins arrondis (borderRadius: 10)
-    //     - Ombres (shadowColor, shadowOffset, shadowOpacity, shadowRadius, elevation)
 
-    //    **header** :
-    //     - Direction flex en ligne (row)
-    //     - Alignement des éléments
-    //     - Marge inférieure
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
 
-    //    **avatar** :
-    //     - Dimensions : 80x80 pixels
-    //     - Bordure circulaire (borderRadius: 40)
-    //     - Marge droite
-    //     - Prévention du rétrécissement
+    avatar: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        marginRight: 16,
+        overflow: 'hidden',
+    },
 
+    card: {
+        backgroundColor: '#fff',
+        padding: 20,
+        margin: 16,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+
+    userInfo: {
+        flex: 1,
+        flexWrap: 'wrap',
+    },
+
+    name: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+
+    job: {
+        fontSize: 14,
+        color: '#666',
+    },
+
+    rating: {
+        fontSize: 14,
+        color: '#666',
+    },
+
+    contact: {
+        borderTopWidth: 1,
+        borderTopColor: '#ccc',
+        paddingTop: 16,
+    },
+
+    contactItem: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 8,
+    },
     //    **userInfo** :
     //     - Utilisation de l'espace restant
     //     - Gestion du retour à la ligne
