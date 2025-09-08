@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export interface UserCardProps {
     name: string;
@@ -9,7 +9,7 @@ export interface UserCardProps {
     avatar: string;
 }
 
-const userData: UserCardProps = {
+export const userData: UserCardProps = {
     name: "John Doe",
     job: "Développeur React Native",
     rating: 5,
@@ -18,38 +18,30 @@ const userData: UserCardProps = {
     avatar: "https://randomuser.me/api/portraits/men/1.jpg",
 };
 
-
-// Header component
 function Header({ userData }: { userData: UserCardProps }) {
     return (
         <View style={styles.header}>
-            <Image source={{ uri: userData.avatar }} style={styles.avatar} />
             <View>
-                <Text>{userData.name}</Text>
-                <Text>{userData.job}</Text>
-                <View>{userData.rating}</View>
+                <Image
+                    source={{ uri: userData.avatar }}
+                    style={styles.avatar} />
+                <Text style={styles.name}>{userData.name}</Text>
+                <Text style={styles.job}>{userData.job}</Text>
+                <Text style={styles.rating}>{userData.rating}</Text>
             </View>
         </View>
     );
 }
-//
 
-// Contact component
 function Contact({ userData }: { userData: UserCardProps }) {
     return (
         <View>
-            <Text>{userData.email}</Text>
-            <Text>{userData.phone}</Text>
+            <Text style={styles.contactItem}>{userData.email}</Text>
+            <Text style={styles.contactItem}>{userData.phone}</Text>
         </View>
     );
 }
 
-// Main ProfileCard component
-//         ### Layout
-// - Carte avec fond blanc et ombres légères
-// - Coins arrondis
-// - Marges extérieures
-// - Padding interne
 export function ProfileCard({ userData }: { userData: UserCardProps }) {
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -95,11 +87,7 @@ const styles = StyleSheet.create({
         padding: 20,
         margin: 16,
         borderRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        boxShadow: '#000 0px 2px 4px',
     },
 
     userInfo: {
@@ -134,22 +122,4 @@ const styles = StyleSheet.create({
         color: '#666',
         marginBottom: 8,
     },
-    //    **userInfo** :
-    //     - Utilisation de l'espace restant
-    //     - Gestion du retour à la ligne
-
-    //    **Styles de texte** (name, job, rating) :
-    //     - Tailles de police appropriées
-    //     - Couleurs
-    //     - Marges
-
-    //    **contact** :
-    //     - Bordure supérieure
-    //     - Padding supérieur
-
-    //    **contactItem** :
-    //     - Taille de police
-    //     - Couleur
-    //     - Marge inférieure
-
 });
