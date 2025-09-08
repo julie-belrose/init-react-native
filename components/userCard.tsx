@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
         margin: 16,
         borderRadius: 10,
         boxShadow: '#000 0px 2px 4px',
+        height: "auto",
+        alignSelf: 'flex-start',
     },
 
     userInfo: {
