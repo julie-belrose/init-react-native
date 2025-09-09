@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export type Variant = 'detailed' | 'compact';
+export type Variant = 'default' | 'compact';
 
 export interface UsersCardInterface {
     users: UserCardProps[];
@@ -62,16 +62,16 @@ export const users: UsersCardInterface = {
 };
 
 
-function Header({ userData, variant = 'detailed' }: { userData: UserCardProps, variant?: Variant }) {
+function Header({ userData, variant = 'default' }: { userData: UserCardProps, variant?: Variant }) {
     return (
         <View style={styles.header}>
             <View>
                 <Image
-                    source={{ uri: userData.avatar }}
-                    style={variant === 'compact' ? styles.avatarCompact : styles.avatar} />
-                <Text style={styles.name}>{userData.name}</Text>
-                <Text style={styles.job}>{userData.job}</Text>
-                <Text style={styles.rating}>{userData.rating}</Text>
+                    source={{ uri: userData?.avatar }}
+                    style={variant === 'compact' ? styles.avatarSmall : styles.avatar} />
+                <Text style={styles.name}>{userData?.name}</Text>
+                <Text style={styles.job}>{userData?.job}</Text>
+                <Text style={styles.rating}>{userData?.rating}</Text>
             </View>
         </View>
     );
@@ -80,16 +80,11 @@ function Header({ userData, variant = 'detailed' }: { userData: UserCardProps, v
 function Contact({ userData }: { userData: UserCardProps }) {
     return (
         <View>
-            <Text style={styles.contactItem}>{userData.email}</Text>
-            <Text style={styles.contactItem}>{userData.phone}</Text>
+            <Text style={styles.contactItem}>{userData?.email}</Text>
+            <Text style={styles.contactItem}>{userData?.phone}</Text>
         </View>
     );
 }
-
-// - Accepte des props `user` et`variant`
-//     - Deux modes d'affichage selon la prop `variant` :
-//         - `"detailed"` : carte complète(par défaut)
-//             - `"compact"` : carte réduite
 
 export function Button({ title, onPress }: { title: string, onPress: () => void }) {
     return (
@@ -99,23 +94,25 @@ export function Button({ title, onPress }: { title: string, onPress: () => void 
     );
 }
 
-export function UserCardList({ users }: { users: UsersCardInterface }) {
+export function ProfileCardList({ users, variant = 'default' }: { users: UsersCardInterface, variant?: Variant }) {
     return (
         <View>
             {users.users.map((user) => (
-                <UserCard key={user.id} userData={user} />
+                <ProfileCard key={user.id} userData={user} variant={variant} />
             ))}
         </View>
     );
 }
 
-export function ProfileCard({ userData, variant = 'detailed' }: { userData: UserCardProps, variant?: Variant }) {
+export function ProfileCard({ userData, variant = 'default' }: { userData: UserCardProps, variant?: Variant }) {
     return (
         <SafeAreaView style={styles.safeArea}>
-            <View style={[styles.card, variant === 'compact' && styles.compactCard]}>
+            <View style={[styles.card, variant === 'default' && styles.card,
+            variant === 'compact' && styles.compactCard]}>
                 <Header userData={userData} />
                 <View style={styles.contact}>
                     <Contact userData={userData} />
+                    <Button title="Contact me" onPress={() => console.log('Contact me')} />
                 </View>
             </View>
         </SafeAreaView>
@@ -124,21 +121,19 @@ export function ProfileCard({ userData, variant = 'detailed' }: { userData: User
 }
 
 export function DisplayContent({ children, condition, valueStart = 0, valueEnd = 0 }: { children: React.ReactNode, condition: 'custom', valueStart?: number, valueEnd?: number }) {
-    //2. Utilisez `users.slice(0, 2).map()` pour les 2 premiers utilisateurs //slice Start
-    //3. Utilisez `users.slice(2).map()` pour les utilisateurs restants //SliceEnd
 
     const items = React.Children.toArray(children);
 
     switch (condition) {
         case 'custom':
             return (
-                <View>
+                <View style={styles.contentContainer}>
                     {items && items.slice(valueStart, valueEnd)}
                 </View>
             );
         default:
             return (
-                <View>
+                <View style={styles.contentContainer}>
                     {items && items.slice(valueStart)}
                 </View>
             );
@@ -147,17 +142,21 @@ export function DisplayContent({ children, condition, valueStart = 0, valueEnd =
 }
 
 
-const Section = ({ children, variant = 'detailed' }: { children: React.ReactNode, variant?: Variant }) => {
+export const Section = ({ children, variant = 'default' }: { children: React.ReactNode, variant?: Variant }) => {
     return (
-        <View>
+        <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Section - {variant}</Text>
             {children}{variant === 'compact'}
         </View>
     );
 };
 
-export function UserCard({ userData, variant = 'detailed' }: { userData: UserCardProps, variant?: Variant }) {
+export function UserCard({ userData, users, variant = 'default' }: { userData: UserCardProps, users: UsersCardInterface, variant?: Variant }) {
     return (
-        <ProfileCard userData={userData} variant={variant} />
+        <>
+            {/* <ProfileCard userData={userData} variant={variant} /> */}
+            <ProfileCardList users={users} variant={variant} />
+        </>
     );
 }
 
@@ -165,6 +164,22 @@ const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
         paddingTop: 50,
+        backgroundColor: '#e4f4f5',
+    },
+
+    scrollView: {
+        flex: 1,
+    },
+
+    contentContainer: {
+        paddingTop: 20,
+        paddingBottom: 20,
+    },
+
+    title: {
+        textAlign: 'center',
+        fontSize: 24,
+        fontWeight: 'bold',
     },
 
     header: {
@@ -181,7 +196,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
 
-    avatarCompact: {
+    avatarSmall: {
         width: 50,
         height: 50,
         borderRadius: 25,
@@ -246,5 +261,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#fff',
         padding: 8,
+    },
+
+    sectionTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        alignSelf: 'flex-start',
+    },
+
+    section: {
+        marginBottom: 16,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
     },
 });

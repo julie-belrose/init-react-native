@@ -5,8 +5,7 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { UserCard } from '@/components/userCard';
-import { userData } from '@/components/userCard';
+import { Section, UserCard, users } from '@/components/userCard';
 
 export default function HomeScreen() {
   return (
@@ -21,7 +20,13 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
-        <UserCard userData={userData} />
+        <Section variant='compact'>
+          <UserCard userData={users.users[0]} users={users} variant='compact' />
+        </Section>
+
+        <Section variant='default'>
+          <UserCard userData={users.users[0]} users={users} variant='default' />
+        </Section>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
